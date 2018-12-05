@@ -1,0 +1,154 @@
+package com.javalesson.EdX_OOP;
+
+import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
+
+public class Battleship {
+    private static int x;
+    private static int y;
+    private static Scanner input = new Scanner(System.in);
+    //Create map
+    private static MapClass map = new MapClass(5, 5);
+
+    public static void main(String[] args) {
+        System.out.println("***Welcome to Battle Ships game***");
+        System.out.println("Right now, the sea is empty.");
+        //Create array to store computer moves
+        MapClass compMap = new MapClass(5, 5);
+
+        //Ship number
+        int userShips = 3;
+        int compShips = 3;
+
+        //print the map for the first time
+        map.printMap();
+
+        //User enter ships' coordinates
+        System.out.println("***Deploy your ships***");
+        for (int i = 0; i < userShips; i++) {
+            deployShip(i + 1);
+            map.putSymbol(x, y, "@");
+        }
+        //Computer deploys ships randomly
+        int a;
+        int b;
+        int i = 0;
+        do {
+            a = ThreadLocalRandom.current().nextInt(0, map.row);
+            b = ThreadLocalRandom.current().nextInt(0, map.col);
+            i++;
+            compMap.putSymbol(a, b, "S");
+            System.out.printf("%d. Computer deployed ship ", i);
+            System.out.println();
+        }
+        while ((map.getSymbol(a, b) == "@" || compMap.getSymbol(a, b) == "S") && i < compShips);
+
+
+        //print updated map for user ships
+
+        map.printMap();
+
+
+        //Battle!
+        int userX = 0;
+        int userY = 0;
+        int compX = 0;
+        int compY = 0;
+        while (userShips != 0 && compShips != 0) {
+            //Game start for user
+            System.out.println("You turn:");
+            System.out.print("Enter X coordinate:");
+            userX = input.nextInt();
+            while (userX > map.row) {
+                System.out.printf("Please enter X coordinate within %d bound:", map.row);
+                userX = input.nextInt();
+            }
+            System.out.print("Enter Y coordinate:");
+            userY = input.nextInt();
+            while (userY > map.col) {
+                System.out.printf("Please enter Y coordinate within %d bound:", map.col);
+                userY = input.nextInt();
+            }
+            if ((compMap.getSymbol(userX, userY) == "S")) {
+                System.out.println("Boom!You sunk the ship!");
+                map.putSymbol(userX, userY, "!");
+                compShips--;
+
+            } else if (map.getSymbol(userX, userY) == "@") {
+                System.out.println("Oh no!You sunk your own ship :(");
+                map.putSymbol(userX, userY, "X");
+                userShips--;
+            } else {
+                System.out.println("Sorry! You missed!");
+                map.putSymbol(userX, userY, "-");
+            }
+
+            //print the map
+            map.printMap();
+
+            System.out.println();
+            System.out.print("Your ships: " + userShips + " |");
+            System.out.println("Computer ships: " + compShips);
+
+            //Game start for computer
+            System.out.println("Computer's turn:");
+
+            do {
+                compX = ThreadLocalRandom.current().nextInt(0, map.row);
+                compY = ThreadLocalRandom.current().nextInt(0, map.col);
+            }
+            while (compMap.getSymbol(compX, compY) == "M");
+
+            if (compMap.getSymbol(compX, compY) == "S") {
+                System.out.println("The computer sunk one of its own ships!");
+                compMap.putSymbol(compX, compY, "!");
+                compShips--;
+            } else if (map.getSymbol(compX, compY) == "@") {
+                System.out.println("The computer sunk one of your ships!");
+                map.putSymbol(compX, compY, "x");
+                userShips--;
+            } else {
+                System.out.println("Computer missed");
+                compMap.putSymbol(compX, compY, "M");
+            }
+        }
+
+        //print the map
+        map.printMap();
+        System.out.println();
+        System.out.print("Your ships: " + userShips + " |");
+        System.out.println("Computer ships: " + compShips);
+
+        System.out.println("***Game Over***");
+        System.out.print("Your ships: " + userShips + " |");
+        System.out.println("Computer ships: " + compShips);
+        if (userShips > compShips) {
+            System.out.println("Hooray! You win the battle :)");
+        } else {
+            System.out.println("You lose :(");
+        }
+
+    }
+
+    public static void deployShip(int k) {
+        int x1;
+        int y1;
+        do {
+            System.out.printf("Enter X coordinate for your ship %d (within bound %d ): ", k, map.row);
+            x1 = input.nextInt();
+            x = x1;
+        } while (x1 > map.row-1);
+
+
+        do {
+            System.out.printf("Enter Y coordinate for your ship %d: (within bound %d ): ", k, map.col);
+            y1 = input.nextInt();
+            y=y1;
+        } while (y1 > map.col-1);
+    }
+
+}
+
+
+
+

@@ -1,0 +1,67 @@
+package com.javalesson.EdX_OOP;
+
+public class MapClass {
+    //Field
+    protected int row;
+    protected int  col;
+    private String[][] map;
+
+    //Constructor
+    public MapClass(int rows, int columns) {
+        row = rows;
+        col = columns;
+        map = new String[row][col];
+
+    }
+
+    //print Map
+    public void printMap() {
+        System.out.println();
+        for (int i = 0; i < map.length; i++) {
+            if (i == 0)
+                System.out.print("  " + i);
+            else
+                System.out.print(i);
+        }
+        System.out.println();
+        for (row = 0; row < map.length; row++) {
+            System.out.print(row + "|");
+            for (col = 0; col < map[row].length; col++) {
+                if (map[row][col] == null) {
+                    System.out.print(" ");
+                } else {
+                    System.out.print(map[row][col]);
+
+                }
+            }
+            System.out.println("|" + row);
+        }
+        for (int i = 0; i < map.length; i++) {
+            if (i == 0)
+                System.out.print("  " + i);
+            else
+                System.out.print(i);
+        }
+        System.out.println();
+    }
+
+/*    //deploy your ships
+    public String deployShips() {
+        if (row * col != 0) {
+            int shipNumber = row / 2;   //ship number condition
+        }*/
+
+       public void putSymbol(int x, int y, String symbol) {
+        map[x][y] = symbol;
+    }
+    public String getSymbol(int x, int y){
+           String symbol = map[x][y];
+           return symbol;
+    }
+}
+
+
+
+
+
+
